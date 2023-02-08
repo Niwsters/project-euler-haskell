@@ -1,4 +1,5 @@
 build:
+	mkdir -p dist
 	ghc --make -o dist/project-euler-haskell src/*.hs
 
 run:
