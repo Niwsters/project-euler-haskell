@@ -1,16 +1,18 @@
-module Primes (primes) where
+module Primes (test, primes) where
 
-import Data.Array.Unboxed
- 
-primes :: [Int]
-primes = 2 : oddprimes ()
+-- Cheers to https://stackoverflow.com/a/11769856
+
+isPrime n = go 2
   where
-    oddprimes = (3 :) . sieve 3 [] . oddprimes
-    sieve x fs (p:ps) = [i*2 + x | (i,True) <- assocs a]
-                        ++ sieve (p*p) ((p,0) :
-                             [(s, rem (y-q) s) | (s,y) <- fs]) ps
-      where
-      q = (p*p-x)`div`2
-      a :: UArray Int Bool
-      a = accumArray (\ b c -> False) True (1,q-1)
-                     [(i,()) | (s,y) <- fs, i <- [y+s, y+s+s..q]]
+    go d
+      | d*d > n      = True
+      | rem n d == 0 = False
+      | otherwise    = go (d+1)
+
+primes = filter isPrime [2 .. ]
+
+assertEqual a b
+  | a == b    = "Assertion passed"
+  | otherwise = "Expected " ++ (show a) ++ " and " ++ (show b) ++ " to be equal"
+
+test = assertEqual (last (take 100 primes)) 541

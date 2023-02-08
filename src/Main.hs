@@ -5,8 +5,8 @@ import qualified Problem2
 import qualified Problem3
 import qualified Problem4
 
-import qualified Primes2
+import qualified Primes
 
 main = do
-  print Primes2.test
+  print Primes.test
   print Problem4.result
