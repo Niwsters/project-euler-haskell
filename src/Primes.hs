@@ -1,4 +1,4 @@
-module Primes (test, primes, primeFactors) where
+module Primes (test, primes, primeFactors, lowestPrime) where
 
 import Data.List (find)
 
@@ -19,8 +19,8 @@ assertEqual a b
 
 test = assertEqual (last (take 100 primes)) 541
 
-nextPrime :: Integer -> Integer
-nextPrime x = case find (\n -> mod x n == 0) primes of
+lowestPrime :: Integer -> Integer
+lowestPrime x = case find (\n -> mod x n == 0) primes of
   Just n -> n
   Nothing -> 1
 
@@ -30,4 +30,4 @@ primeFactors n = go []
       | div n (product factors) == 1 = factors
       | otherwise = go (prime : factors)
       where
-        prime = nextPrime n
+        prime = lowestPrime n

@@ -10,4 +10,4 @@ import qualified Problem7
 import qualified Primes
 
 main = do
-  print Problem5.result
+  print Problem3.result
