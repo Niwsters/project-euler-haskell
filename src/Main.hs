@@ -8,8 +8,9 @@ import qualified Problem5
 import qualified Problem6
 import qualified Problem7
 import qualified Problem8
+import qualified Problem9
 
 import qualified Primes
 
 main = do
-  print Problem8.result
+  print Problem9.result
