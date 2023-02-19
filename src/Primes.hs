@@ -1,4 +1,4 @@
-module Primes (test, primes, primeFactors, lowestPrime) where
+module Primes (test, isPrime, primes, primeFactors, lowestPrime) where
 
 import Data.List (find)
 
