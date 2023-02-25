@@ -31,14 +31,15 @@ diagonals f = result
     diagonalCoords = map each coords
     filt (x,y) = x >= 0 && y >= 0 && x <= (maximum xs) && y <= (maximum ys)
     filtered = filter (all filt) diagonalCoords
-    result = map (\x -> map cell x) filtered
+    diagonals = map (\x -> map cell x) filtered
+    result = maximum (map product diagonals)
 
 downRight x y i = (x+i, y+i)
 downLeft x y i = (x-i,y+i)
 
 maxHorizontal = maxProduct parsed
 maxVertical = maxProduct (transpose parsed)
-maxDownRight = maximum (map product (diagonals downRight))
-maxDownLeft = maximum (map product (diagonals downLeft))
+maxDownRight = diagonals downRight
+maxDownLeft = diagonals downLeft
 
 result = maximum [maxHorizontal, maxVertical, maxDownRight, maxDownLeft]
