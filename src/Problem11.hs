@@ -13,15 +13,32 @@ parsed = map (map parse) splitted
 
 slice from to xs = take (to - from + 1) (drop from xs)
 
+xs = [0..((length (parsed !! 0)) - 1)]
+ys = [0..((length parsed) - 1)]
+
 maxProduct ns = maximum products
   where
     divvied y = divvy 4 1 (ns !! y)
-    ys = [0..((length parsed) - 1)]
     numbers = map divvied ys
     flat = concat numbers
     products = map product flat
 
+diagonals f = result
+  where
+    cell (x,y) = parsed !! x !! y
+    coords = [(x,y) | x <- xs, y <- ys]
+    each (x,y) = map (f x y) [0..3]
+    diagonalCoords = map each coords
+    filt (x,y) = x >= 0 && y >= 0 && x <= (maximum xs) && y <= (maximum ys)
+    filtered = filter (all filt) diagonalCoords
+    result = map (\x -> map cell x) filtered
+
+downRight x y i = (x+i, y+i)
+downLeft x y i = (x-i,y+i)
+
 maxHorizontal = maxProduct parsed
 maxVertical = maxProduct (transpose parsed)
+maxDownRight = maximum (map product (diagonals downRight))
+maxDownLeft = maximum (map product (diagonals downLeft))
 
-result = max maxHorizontal maxVertical
+result = maximum [maxHorizontal, maxVertical, maxDownRight, maxDownLeft]
