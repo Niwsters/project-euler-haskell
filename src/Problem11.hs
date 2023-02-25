@@ -11,8 +11,6 @@ parse s = read s :: Integer
 splitted = map (splitOn " ") lines'
 parsed = map (map parse) splitted
 
-slice from to xs = take (to - from + 1) (drop from xs)
-
 xs = [0..((length (parsed !! 0)) - 1)]
 ys = [0..((length parsed) - 1)]
 
