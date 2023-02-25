@@ -18,8 +18,7 @@ ys = [0..((length parsed) - 1)]
 
 maxProduct ns = maximum products
   where
-    divvied y = divvy 4 1 (ns !! y)
-    numbers = map divvied ys
+    numbers = map (divvy 4 1) ns
     flat = concat numbers
     products = map product flat
 
