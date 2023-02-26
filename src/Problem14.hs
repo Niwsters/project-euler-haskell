@@ -6,7 +6,7 @@ import Debug.Trace
 
 collatzNumbers n = numbers
   where
-    numbers = listArray(1,n) $ 0 : map go [2..n]
+    numbers = listArray(1,n) (0 : map go [2..n])
     go x
       | y <= n = 1 + numbers ! y
       | otherwise = 1 + go y
