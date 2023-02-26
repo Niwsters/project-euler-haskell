@@ -1,16 +1,17 @@
 module Problem14 (result) where
+import Data.Array
 import Data.List
 import Data.Ord
+import Debug.Trace
 
-collatz n = go [] n
+collatzNumbers n = numbers
   where
-    next n
-      | even n = div n 2
-      | odd n  = 3*n+1
-    go sequence n
-      | n == 1 = sequence
-      | otherwise = go (sequence ++ [n]) (next n)
+    numbers = listArray(1,n) $ 0 : map go [2..n]
+    go x
+      | y <= n = 1 + numbers ! y
+      | otherwise = 1 + go y
+      where
+        y | even x    = div x 2
+          | otherwise = 3*x+1
 
-collatzNumbers = map collatz [1..(1000000-1)]
-
-result = maximumBy (comparing length) collatzNumbers
+result = maximumBy (comparing snd) (assocs (collatzNumbers 1000000))
