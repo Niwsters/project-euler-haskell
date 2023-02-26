@@ -13,6 +13,8 @@ import qualified Problem10
 import qualified Problem11
 import qualified Problem12
 import qualified Problem13
+import qualified Primes
 
 main = do
-  print Problem13.result
+  print Problem12.result
+  --print Primes.test

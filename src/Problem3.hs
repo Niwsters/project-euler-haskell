@@ -1,5 +1,5 @@
 module Problem3 (result) where
-import Primes (primes, primeFactors, lowestPrime)
+import Primes (primes, lowestPrime)
 import Data.List (find)
 
 number = 600851475143
