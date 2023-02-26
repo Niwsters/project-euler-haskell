@@ -11,8 +11,7 @@ import qualified Problem8
 import qualified Problem9
 import qualified Problem10
 import qualified Problem11
-
-import qualified Primes
+import qualified Problem12
 
 main = do
-  print Problem11.result
+  print Problem12.result
