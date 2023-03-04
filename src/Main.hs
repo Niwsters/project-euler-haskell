@@ -17,8 +17,9 @@ import qualified Problem14
 import qualified Problem15
 import qualified Problem16
 import qualified Problem17
+import qualified Problem18
 import qualified Primes
 
 main = do
-  print Problem17.result
+  print Problem18.result
   --print Primes.test
