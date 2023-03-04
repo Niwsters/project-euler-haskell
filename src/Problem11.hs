@@ -11,8 +11,8 @@ parse s = read s :: Integer
 splitted = map (splitOn " ") lines'
 parsed = map (map parse) splitted
 
-xs = [0..((length (parsed !! 0)) - 1)]
-ys = [0..((length parsed) - 1)]
+xs = [0..(length (head parsed) - 1)]
+ys = [0..(length parsed - 1)]
 
 maxProduct ns = maximum products
   where
@@ -26,9 +26,9 @@ diagonals f = result
     coords = [(x,y) | x <- xs, y <- ys]
     each (x,y) = map (f x y) [0..3]
     diagonalCoords = map each coords
-    filt (x,y) = x >= 0 && y >= 0 && x <= (maximum xs) && y <= (maximum ys)
+    filt (x,y) = x >= 0 && y >= 0 && x <= maximum xs && y <= maximum ys
     filtered = filter (all filt) diagonalCoords
-    diagonals = map (\x -> map cell x) filtered
+    diagonals = map (map cell) filtered
     result = maximum (map product diagonals)
 
 downRight x y i = (x+i, y+i)
