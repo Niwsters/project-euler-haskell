@@ -26,7 +26,11 @@ nav = go 1 []
           | a <= limit && b <= limit = q ++ [(wa,a),(wb,b)]
           | otherwise = q
 
-n = [1..]
-inf = zip [1..] (map (\x -> (take 2 . drop x) n) [1..])
+trianglesum n = sum [1..n]
 
-result = take 10 inf
+n = [1..]
+inf = map (\x -> (take x . drop (trianglesum (x-1))) n) n
+inf' = concatMap (\(r,ns) -> map (r,) ns) (zip [1..] inf)
+inf'' = map (\(r,n) -> (r+n, r+n+1)) inf'
+
+result = take 10 inf''
