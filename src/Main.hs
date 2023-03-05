@@ -21,5 +21,5 @@ import qualified Problem18
 import qualified Primes
 
 main = do
-  print Problem1.result
+  print Problem18.result
   --print Primes.test
