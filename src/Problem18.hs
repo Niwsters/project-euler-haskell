@@ -31,12 +31,21 @@ q = [1..(length weights)]
 
 
 pyramid = map (map parse . splitOn " ") (splitOn "\n" input)
+
 sum' a = concatMap (\n -> map (+n) a)
 sum'' a b = concatMap (\(i,n) -> map (+n) (take 2 (drop i b))) (zip [0..] a)
+
+combine = go []
+  where
+    go result []     = result
+    go result (x:xs) = go result' (drop 1 xs)
+      where
+        result' = result ++ [[x, head xs]]
+combine' a = [[head a]] ++ (combine . tail . init) a ++ [[last a]]
+
 go (p:pyramid) = sum'' p (head pyramid) : tail pyramid
 solve pyramid
   | length pyramid == 1 = (maximum . concat) pyramid
   | otherwise = solve (go (trace (show pyramid) pyramid))
 
-result = solve pyramid
-
+result = combine' [1, 2, 3, 4]
