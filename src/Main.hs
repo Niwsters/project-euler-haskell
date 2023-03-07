@@ -22,5 +22,5 @@ import qualified Primes
 import qualified Dijkstra
 
 main = do
-  print Dijkstra.test
+  print Problem18.result
   --print Primes.test

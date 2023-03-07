@@ -1,4 +1,4 @@
-module Dijkstra where
+module Dijkstra (dijkstra, Distance, Edge, edge, doubleEdge) where
 import Data.List
 import Data.Function
 import qualified Data.Map as Map
@@ -38,7 +38,8 @@ data Edge = Edge
     to :: Integer,
     distance :: Distance } deriving (Show)
 
-doubleEdge a b distance = [Edge a b (Distance distance), Edge b a (Distance distance)]
+edge a b distance = Edge a b (Distance distance)
+doubleEdge a b distance = [edge a b distance, edge b a distance]
 
 nodes = [0..8]
 
@@ -85,17 +86,17 @@ dijkstra nodes edges = go distances visited
         -- 2. Set the non-visited node with the smallest current distance as the current node C
         allDistances = Map.toList distances
         nonVisited = filter (\(node,_) -> not (Set.member node visited)) allDistances
-        (c,distanceC) = minimumBy (compare `on` snd) nonVisited
+        (u,distanceU) = minimumBy (compare `on` snd) nonVisited
 
         -- 3. For each neighbor N of your current node C:
-        neighboringEdges = filter (\edge -> from edge == c) edges
+        neighboringEdges = filter (\edge -> from edge == u) edges
         -- add the current distance of C with the weight of the edge connecting C-N.
         -- If it's smaller than the current distance of N, set it as the new current distance of N.
-        newDistance edge = distanceC + distance edge
+        newDistance edge = distanceU + distance edge
         replaceDistance distances edge = Map.adjust (min (newDistance edge)) (to edge) distances
         distances' = foldl replaceDistance distances neighboringEdges
 
         -- 4. Mark th currnt node C as visited.
-        visited' = trace (show distances') Set.insert c visited
+        visited' = trace (show distances') Set.insert u visited
 
 test = dijkstra nodes2 edges2
