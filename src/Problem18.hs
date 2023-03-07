@@ -3,6 +3,7 @@ import Data.List.Split
 import Data.Array
 import qualified Data.Set as Set
 import Debug.Trace
+import Data.List
 import Data.Bifunctor
 import Data.Function
 import Data.Foldable
@@ -13,14 +14,28 @@ input = "75\n95 64\n17 47 82\n18 35 87 10\n20 04 82 47 65\n19 01 23 75 03 34\n88
 
 parse :: String -> Integer
 parse = read
-weights = listArray (1,10) (concatMap (map parse . splitOn " ") (splitOn "\n" testInput))
+lines' = lines input
+weights = concatMap (map parse . splitOn " ") lines'
 
+trianglesum :: Integer -> Integer
 trianglesum n = sum [1..n]
 
-n = [1..]
-inf = map (\x -> (take x . drop (trianglesum (x-1))) n) n
-inf' = concatMap (\(r,ns) -> map (r,) ns) (zip [1..] inf)
+n :: [Integer]
+n = [0..]
+inf :: [[Integer]]
+inf = map (\x -> (take (fromIntegral x) . drop (fromIntegral(trianglesum (x-1)))) n) n
+inf' :: [(Integer,Integer)]
+inf' = concatMap (\(r,ns) -> map (r,) ns) (zip [0..] inf)
+inf'' :: [(Integer,Integer)]
 inf'' = map (\(r,n) -> (r+n, r+n+1)) inf'
-inf''' = concatMap (\(node, (a,b)) -> [(node, a),(node,b)]) (zip [1..] inf'')
---neighborWeights = listArray (1,6) (map (bimap (weights !) (weights !)) (elems neighbors))
-result = take 12 inf'''
+inf''' :: [(Integer,Integer)]
+inf''' = concatMap (\(node, (a,b)) -> [(node, a),(node,b)]) (zip [0..] inf'')
+
+createEdge :: Integer -> Integer -> Edge
+createEdge from to = edge from to (negate (weights !! fromIntegral to))
+nodes :: [Integer]
+nodes = [0..(fromIntegral(length weights) - 1)]
+paths = take ((length nodes - length lines') * 2) inf'''
+edges = map (uncurry createEdge) paths
+foundMax = fromInteger (head weights) - minimum (map snd (dijkstra nodes edges))
+result = sortBy (compare `on` snd) (dijkstra nodes edges)
