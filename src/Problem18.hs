@@ -15,27 +15,24 @@ input = "75\n95 64\n17 47 82\n18 35 87 10\n20 04 82 47 65\n19 01 23 75 03 34\n88
 parse :: String -> Integer
 parse = read
 lines' = lines input
-weights = concatMap (map parse . splitOn " ") lines'
+pyramid = map (map parse . splitOn " ") lines'
+go pyramid = result
+  where
+    as = head pyramid
+    bs = pyramid !! 1
+    newHead = add as bs
+    result = newHead : drop 2 pyramid
 
-trianglesum :: Integer -> Integer
-trianglesum n = sum [1..n]
+add as bs = result
+  where
+    flat = concatMap (\(i,a) -> [(i,a + bs !! i),(i+1,a + bs !! (i+1))]) (zip [0..] as)
+    cols = nub (map fst flat)
+    result = map (\i -> (snd . maximum) (filter (\(i2,_) -> i2 == i) flat)) cols
 
-n :: [Integer]
-n = [0..]
-inf :: [[Integer]]
-inf = map (\x -> (take (fromIntegral x) . drop (fromIntegral(trianglesum (x-1)))) n) n
-inf' :: [(Integer,Integer)]
-inf' = concatMap (\(r,ns) -> map (r,) ns) (zip [0..] inf)
-inf'' :: [(Integer,Integer)]
-inf'' = map (\(r,n) -> (r+n, r+n+1)) inf'
-inf''' :: [(Integer,Integer)]
-inf''' = concatMap (\(node, (a,b)) -> [(node, a),(node,b)]) (zip [0..] inf'')
+solve pyramid
+  | length pyramid == 1 = (maximum . head) pyramid
+  | otherwise = solve pyramid'
+  where
+    pyramid' = go pyramid
 
-createEdge :: Integer -> Integer -> Edge
-createEdge from to = edge from to (negate (weights !! fromIntegral to))
-nodes :: [Integer]
-nodes = [0..(fromIntegral(length weights) - 1)]
-paths = take ((length nodes - length lines') * 2) inf'''
-edges = map (uncurry createEdge) paths
-foundMax = fromInteger (head weights) - minimum (map snd (dijkstra nodes edges))
-result = sortBy (compare `on` snd) (dijkstra nodes edges)
+result = solve pyramid
