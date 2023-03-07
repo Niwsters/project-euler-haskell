@@ -19,7 +19,8 @@ import qualified Problem16
 import qualified Problem17
 import qualified Problem18
 import qualified Primes
+import qualified Dijkstra
 
 main = do
-  print Problem18.result
+  print Dijkstra.test
   --print Primes.test
