@@ -3,6 +3,7 @@ import Data.List.Split
 import Data.Array
 import qualified Data.Set as Set
 import Debug.Trace
+import Data.List
 import Data.Bifunctor
 import Data.Function
 import Data.Foldable
@@ -13,14 +14,25 @@ input = "75\n95 64\n17 47 82\n18 35 87 10\n20 04 82 47 65\n19 01 23 75 03 34\n88
 
 parse :: String -> Integer
 parse = read
-weights = listArray (1,10) (concatMap (map parse . splitOn " ") (splitOn "\n" testInput))
+lines' = lines input
+pyramid = map (map parse . splitOn " ") lines'
+go pyramid = result
+  where
+    as = head pyramid
+    bs = pyramid !! 1
+    newHead = add as bs
+    result = newHead : drop 2 pyramid
 
-trianglesum n = sum [1..n]
+add as bs = result
+  where
+    flat = concatMap (\(i,a) -> [(i,a + bs !! i),(i+1,a + bs !! (i+1))]) (zip [0..] as)
+    cols = nub (map fst flat)
+    result = map (\i -> (snd . maximum) (filter (\(i2,_) -> i2 == i) flat)) cols
 
-n = [1..]
-inf = map (\x -> (take x . drop (trianglesum (x-1))) n) n
-inf' = concatMap (\(r,ns) -> map (r,) ns) (zip [1..] inf)
-inf'' = map (\(r,n) -> (r+n, r+n+1)) inf'
-inf''' = concatMap (\(node, (a,b)) -> [(node, a),(node,b)]) (zip [1..] inf'')
---neighborWeights = listArray (1,6) (map (bimap (weights !) (weights !)) (elems neighbors))
-result = take 12 inf'''
+solve pyramid
+  | length pyramid == 1 = (maximum . head) pyramid
+  | otherwise = solve pyramid'
+  where
+    pyramid' = go pyramid
+
+result = solve pyramid

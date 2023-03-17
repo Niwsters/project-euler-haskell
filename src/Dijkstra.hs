@@ -1,9 +1,8 @@
-module Dijkstra (dijkstra, Distance, Edge, edge, doubleEdge) where
+module Dijkstra (dijkstra, Distance, Edge, edge, doubleEdge, distance, from, to) where
 import Data.List
 import Data.Function
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import Debug.Trace
 
 data Distance = Distance Integer | Infinity deriving (Eq, Show)
 Distance a +++ b = Distance (a + b)
@@ -15,7 +14,6 @@ instance Ord Distance where
   Distance a <= Distance b = a <= b
   Distance a <= Infinity = True
   Infinity <= Infinity = False
-
 
 instance Num Distance where
   Distance a + Distance b = Distance (a+b)
@@ -80,7 +78,7 @@ dijkstra nodes edges = go distances visited
     visited = Set.fromList []
 
     go distances visited
-      | null nonVisited = distances
+      | null nonVisited = Map.toList distances
       | otherwise = go distances' visited'
       where
         -- 2. Set the non-visited node with the smallest current distance as the current node C
@@ -97,6 +95,6 @@ dijkstra nodes edges = go distances visited
         distances' = foldl replaceDistance distances neighboringEdges
 
         -- 4. Mark th currnt node C as visited.
-        visited' = trace (show distances') Set.insert u visited
+        visited' = Set.insert u visited
 
 test = dijkstra nodes2 edges2
