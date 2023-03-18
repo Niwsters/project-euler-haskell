@@ -19,8 +19,9 @@ import qualified Problem16
 import qualified Problem17
 import qualified Problem18
 import qualified Problem19
+import qualified Problem20
 import qualified Primes
 import qualified Dijkstra
 
 main = do
-  print Problem19.result
+  print Problem20.result
